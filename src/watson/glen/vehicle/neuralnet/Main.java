@@ -6,7 +6,7 @@ import java.util.Random;
 public class Main
 {
 	private static final int TRAINING_SEED = 0;
-	private static final int NUM_TRAINERS = 1000;
+	private static final int NUM_TRAINERS = 10000;
 	private static final float LEARNING_RATE = 0.1f;
 	private static final int X_SPREAD = 2;
 	private static final int Y_SPREAD = 2;
@@ -52,6 +52,6 @@ public class Main
 	
 	public static float f(float x, float y)
 	{
-		return 4*x + 6; // >= y ? 1 : -1;
+		return 2*x + 1 >= y ? 1 : -1;
 	}
 }

@@ -7,34 +7,52 @@ public class Perceptron
 {
 	private static final int WEIGHT_SEED = 0;
 	protected float[] weights;
+	private boolean hasBias;
 	
-	public Perceptron(int size)
+	public Perceptron(int size, boolean hasBias)
 	{
 		super();
-		this.weights = new float[size + 1];
+		if(hasBias)
+		{
+			this.weights = new float[size + 1];
+			weights[size] = 1; //add the bias
+		}
+		else
+		{
+			this.weights = new float[size];
+		}
 		Random rand = new Random(WEIGHT_SEED);
-		for (int i = 0; i < weights.length; i++)
+		for (int i = 0; i < size; i++)
 		{
 			weights[i] = rand.nextFloat() * 2 - 1; //Note: will never be 1
 		}
-		weights[size] = 1; //add the bias
-		
+		this.hasBias = hasBias;
 	}
-
+	
+	public Perceptron(int size)
+	{
+		this(size, false);
+	}
+	
 	protected int calc(float[] inputs)
 	{
+		assertInputLength(inputs.length);
+		
 		float result = weightedSum(inputs);
 		return activate(result);
 	}
 	
 	public void train(float[] inputs, float desired, float learningRate)
 	{
-		float guess = weightedSum(inputs);
+		assertInputLength(inputs.length);
+		
+		float guess = calc(inputs);
 		float error = desired - guess;
 		
 		for (int i = 0; i < inputs.length; i++)
 			weights[i] += inputs[i] * error * learningRate;
-		weights[weights.length-1] += error * learningRate; //add the bias (input is 1)
+		if(hasBias)
+			weights[weights.length-1] += error * learningRate; //add the bias (input is 1)
 	}
 
 	private int activate(float result)
@@ -44,12 +62,21 @@ public class Perceptron
 
 	protected float weightedSum(float[] inputs)
 	{
-		assert inputs.length + 1 == weights.length : "inputs' length is different that weights' length";
+		assertInputLength(inputs.length);
 		float result = 0;
 		for(int i=0; i<inputs.length; i++)
 			result += inputs[i] * weights[i];
-		result += weights[weights.length-1]; //add the bias (input is 1)
+		if(hasBias)
+			result += weights[weights.length-1]; //add the bias (input is 1)
 		return result;
+	}
+
+	private void assertInputLength(int inputLength)
+	{
+		if(hasBias)
+			assert inputLength + 1 == weights.length : "incorrect number of inputs";
+		else
+			assert inputLength == weights.length : "incorrect number of inputs";
 	}
 	
 	public float[] getWeights()
