@@ -5,25 +5,23 @@ import java.util.Random;
 // http://natureofcode.com/book/chapter-10-neural-networks/
 public class Perceptron
 {
-	private static final int WEIGHT_SEED = 13;
+	private static final int WEIGHT_SEED = 0;
 	protected float[] weights;
 	
 	public Perceptron(int size)
 	{
 		super();
-		this.weights = new float[size];
+		this.weights = new float[size + 1];
 		Random rand = new Random(WEIGHT_SEED);
 		for (int i = 0; i < weights.length; i++)
 		{
 			weights[i] = rand.nextFloat() * 2 - 1; //Note: will never be 1
 		}
+		weights[size] = 1; //add the bias
 		
-		weights[0] = 2;
-		weights[1] = 1;
-		weights[2] = 0.000001f;
 	}
 
-	public int calc(float[] inputs)
+	protected int calc(float[] inputs)
 	{
 		float result = weightedSum(inputs);
 		return activate(result);
@@ -34,10 +32,9 @@ public class Perceptron
 		float guess = weightedSum(inputs);
 		float error = desired - guess;
 		
-		for (int i = 0; i < weights.length; i++)
-		{
+		for (int i = 0; i < inputs.length; i++)
 			weights[i] += inputs[i] * error * learningRate;
-		}
+		weights[weights.length-1] += error * learningRate; //add the bias (input is 1)
 	}
 
 	private int activate(float result)
@@ -45,12 +42,13 @@ public class Perceptron
 		return result >= 0 ? 1 : -1;
 	}
 
-	private float weightedSum(float[] inputs)
+	protected float weightedSum(float[] inputs)
 	{
-		assert inputs.length == weights.length : "inputs' length is different that weights' length";
+		assert inputs.length + 1 == weights.length : "inputs' length is different that weights' length";
 		float result = 0;
 		for(int i=0; i<inputs.length; i++)
 			result += inputs[i] * weights[i];
+		result += weights[weights.length-1]; //add the bias (input is 1)
 		return result;
 	}
 	

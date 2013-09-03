@@ -6,14 +6,14 @@ import java.util.Random;
 public class Main
 {
 	private static final int TRAINING_SEED = 0;
-	private static final int NUM_TRAINERS = 10000;
+	private static final int NUM_TRAINERS = 1000;
 	private static final float LEARNING_RATE = 0.1f;
 	private static final int X_SPREAD = 2;
 	private static final int Y_SPREAD = 2;
 	
 	public static void main(String[] args)
 	{
-		Perceptron p = new Perceptron(3);
+		Perceptron p = new Perceptron(2);
 		
 		//setup
 		Trainer[] trainers = initTrainers();
@@ -52,6 +52,6 @@ public class Main
 	
 	public static float f(float x, float y)
 	{
-		return 2*x + 3; // >= y ? 1 : -1;
+		return 4*x + 6; // >= y ? 1 : -1;
 	}
 }
