@@ -13,12 +13,13 @@ public class Main
 	
 	public static void main(String[] args)
 	{
-		Perceptron p = new Perceptron(2);
+		Perceptron p = new Perceptron(2, true);
 		
 		//setup
 		Trainer[] trainers = initTrainers();
 		
-		trainUsing(p, trainers);
+		runTrainersOn(p, trainers);
+		
 	}
 
 	private static Trainer[] initTrainers()
@@ -39,7 +40,7 @@ public class Main
 		return trainers;
 	}
 	
-	private static void trainUsing(Perceptron p, Trainer[] trainers)
+	private static void runTrainersOn(Perceptron p, Trainer[] trainers)
 	{
 		for (int i = 0; i < trainers.length; i++)
 		{
@@ -52,6 +53,6 @@ public class Main
 	
 	public static float f(float x, float y)
 	{
-		return 2*x + 1 >= y ? 1 : -1;
+		return 2*x + 1;// >= y ? 1 : -1;
 	}
 }

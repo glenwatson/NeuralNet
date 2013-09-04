@@ -31,7 +31,7 @@ public class Perceptron
 	
 	public Perceptron(int size)
 	{
-		this(size, false);
+		this(size, true);
 	}
 	
 	protected int calc(float[] inputs)
@@ -42,17 +42,18 @@ public class Perceptron
 		return activate(result);
 	}
 	
-	public void train(float[] inputs, float desired, float learningRate)
+	public float train(float[] inputs, float desired, float learningRate)
 	{
 		assertInputLength(inputs.length);
 		
-		float guess = calc(inputs);
+		float guess = weightedSum(inputs);
 		float error = desired - guess;
 		
 		for (int i = 0; i < inputs.length; i++)
 			weights[i] += inputs[i] * error * learningRate;
 		if(hasBias)
 			weights[weights.length-1] += error * learningRate; //add the bias (input is 1)
+		return error;
 	}
 
 	private int activate(float result)

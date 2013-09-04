@@ -14,9 +14,9 @@ public class Trainer
 		this.learningRate = learningRate;
 	}
 	
-	public void train(Perceptron p)
+	public float train(Perceptron p)
 	{
-		p.train(inputs, answer, learningRate);
+		return p.train(inputs, answer, learningRate);
 	}
 	
 }
