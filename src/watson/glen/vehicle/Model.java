@@ -96,23 +96,38 @@ public class Model
 	{
 		StringBuilder sb = new StringBuilder();
 		
+		int westBorder = Math.min(0, vehicle.getPostion().getX());
+		int eastBorder = Math.max(size.getX()-1, vehicle.getPostion().getX());
+		int northBorder = Math.min(0, vehicle.getPostion().getY());
+		int southBorder = Math.max(size.getY()-1, vehicle.getPostion().getY());
+		
+		for (Vector v : targets)
+		{
+			westBorder = Math.min(westBorder, v.getX());
+			eastBorder = Math.max(eastBorder, v.getX());
+			northBorder = Math.min(northBorder, v.getY());
+			southBorder = Math.max(southBorder, v.getY());
+		}
+		
 		StringBuilder headerFooter = new StringBuilder();
 		headerFooter.append('+');
-		for(int i = 0; i < size.getX(); i++)
+		for(int i = westBorder; i <= eastBorder; i++)
 			headerFooter.append('-');
 		headerFooter.append("+\r\n");
 		sb.append(headerFooter);
 		
-		for(int y=0; y < size.getY(); y++)
+		for(int y = northBorder; y <= southBorder; y++)
 		{
 			sb.append('|');
-			for(int x = 0; x < size.getX(); x++)
+			for(int x = westBorder; x <= eastBorder; x++)
 			{
 				Vector current = new Vector(x, y);
 				if(current.equals(vehicle.getPostion()))
 					sb.append('O');
 				else if(targets.contains(current))
 					sb.append('X');
+				else if(current.equals(new Vector(0, 0)))
+					sb.append('.');
 				else 
 					sb.append(' ');
 			}

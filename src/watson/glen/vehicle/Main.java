@@ -19,7 +19,7 @@ public class Main
 		targets.add(new Vector(9,0));
 		targets.add(new Vector(9,9));
 		
-		Model model = new Model(vehicle, targets, new Vector(10, 10));
+		Model model = new Model(vehicle, targets, new Vector(5, 5));
 		
 		Input input = new CLInput();
 		
@@ -29,6 +29,9 @@ public class Main
 			model.accelerate(input.getDirection(model));
 			
 			model.tick();
+			
+			if(model.getTargets().isEmpty()) //exit condition
+				run = false;
 		}
 	}
 	
