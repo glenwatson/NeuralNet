@@ -34,7 +34,7 @@ public class Perceptron
 		this(size, true);
 	}
 	
-	protected int calc(float[] inputs)
+	public int calc(float[] inputs)
 	{
 		assertInputLength(inputs.length);
 		
@@ -78,6 +78,14 @@ public class Perceptron
 			assert inputLength + 1 == weights.length : "incorrect number of inputs";
 		else
 			assert inputLength == weights.length : "incorrect number of inputs";
+	}
+	
+	public int getInputSize()
+	{
+		if(hasBias)
+			return weights.length+1;
+		else
+			return weights.length;
 	}
 	
 	public float[] getWeights()
