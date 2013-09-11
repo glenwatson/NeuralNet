@@ -13,7 +13,7 @@ public class Main
 	
 	public static void main(String[] args)
 	{
-		Perceptron p = new Perceptron(2, true);
+		Perceptron p = new Perceptron(2);
 		
 		//setup
 		Trainer[] trainers = initTrainers();
