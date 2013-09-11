@@ -40,14 +40,46 @@ public class Main
 		return trainers;
 	}
 	
-	private static void runTrainersOn(Perceptron p, Trainer[] trainers)
+	private static float runTrainersOn(Perceptron p, Trainer[] trainers)
 	{
+		float[] errors = new float[trainers.length];
 		for (int i = 0; i < trainers.length; i++)
 		{
 			float[] prev = p.weights;
-			trainers[i].train(p);
+			errors[i] = trainers[i].train(p);
 			if(!Arrays.equals(prev, p.weights));
 				System.out.println(Arrays.toString(p.weights));
+		}
+		return standardDeviation(errors);
+	}
+
+	private static float standardDeviation(float[] population)
+	{
+		//calculate the standard deviation
+		float sum = 0;
+		for (float f : population)
+			sum += f;
+		float mean = sum / population.length;
+		
+		float variance = 0;
+		for (float f : population)
+			variance += Math.pow(f - mean, 2);
+		variance = variance / population.length;
+		
+		float stddev = (float) Math.sqrt(variance);
+		System.out.println(stddev);
+		return stddev;
+	}
+	
+	private static void shuffleTrainers(Trainer[] trainers)
+	{
+		Random r = new Random();
+		for(int i = 0; i<trainers.length; i++)
+		{
+			int randIdx = r.nextInt(trainers.length);
+			Trainer temp = trainers[i];
+			trainers[i] = trainers[randIdx];
+			trainers[randIdx] = temp;
 		}
 	}
 	
