@@ -13,13 +13,23 @@ public class Main
 	
 	public static void main(String[] args)
 	{
-		Perceptron p = new Perceptron(2);
+		MultilayerPerceptronNode p1 = new MultilayerPerceptronNode(2);
+		MultilayerPerceptronNode p2 = new MultilayerPerceptronNode(2);
+		MultilayerPerceptronNode p3 = new MultilayerPerceptronNode(2);
+		MultilayerPerceptronLayer l = new MultilayerPerceptronLayer(new MultilayerPerceptronNode[]{p1, p2, p3});
 		
 		//setup
 		Trainer[] trainers = initTrainers();
+		runTrainersOn(new MultilayerPerceptronLayer[]{l}, trainers);
 		
+//		shuffleAndTrain(p, trainers);
+//		shuffleAndTrain(p, trainers);
+	}
+
+	private static void shuffleAndTrain(Perceptron p, Trainer[] trainers)
+	{
+		shuffleTrainers(trainers);
 		runTrainersOn(p, trainers);
-		
 	}
 
 	private static Trainer[] initTrainers()
@@ -35,7 +45,7 @@ public class Main
 			assert y >= -Y_SPREAD;
 			assert y < Y_SPREAD;
 			float answer = f(x, y);
-			trainers[i] = new Trainer(x, y, answer, LEARNING_RATE);
+			trainers[i] = new Trainer(new float[]{x, y}, answer, LEARNING_RATE);
 		}
 		return trainers;
 	}
@@ -52,7 +62,28 @@ public class Main
 		}
 		return standardDeviation(errors);
 	}
-
+	
+	private static float runTrainersOn(MultilayerPerceptronLayer[] layers, Trainer[] trainers)
+	{
+		float error = 0;
+		for(Trainer trainer : trainers)
+		{
+			error = 0;
+			//train the network using this trainer
+			for(MultilayerPerceptronLayer layer : layers)
+			{
+				//train this layer, gathering the errors
+				for(Perceptron perceptron : layer.nodes)
+				{
+					error += perceptron.train(trainer.inputs, trainer.answer, trainer.learningRate);
+				}
+				trainer.answer = trainer.answer + (trainer.answer - error); //adjust for the forward layer's error
+			}
+			System.out.println(error);
+		}
+		return error;
+	}
+	
 	private static float standardDeviation(float[] population)
 	{
 		//calculate the standard deviation
